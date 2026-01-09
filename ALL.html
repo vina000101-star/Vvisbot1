@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HYBRID MONSTER PANEL | XSANZ</title>
+    <style>
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .monster-box { border: 3px solid #f00; padding: 30px; width: 95%; max-width: 600px; box-shadow: 0 0 30px #f00; border-radius: 20px; background: #050505; text-align: center; }
+        h1 { color: #fff; text-shadow: 0 0 15px #f00; margin: 0; font-size: 30px; letter-spacing: 2px; }
+        .sub-header { color: #888; font-size: 10px; margin-bottom: 20px; }
+        .status-box { background: #111; border: 1px solid #0f0; padding: 20px; margin: 15px 0; border-radius: 12px; position: relative; }
+        #timer { font-size: 60px; color: #ff0; font-weight: bold; text-shadow: 0 0 10px #ff0; }
+        .log-container { height: 200px; overflow-y: auto; background: #000; border: 1px solid #333; margin: 15px 0; padding: 12px; font-size: 11px; text-align: left; color: #0f0; border-radius: 8px; box-shadow: inset 0 0 10px #0f0; }
+        .btn-launch { width: 100%; padding: 25px; cursor: pointer; font-weight: 900; border-radius: 15px; text-transform: uppercase; background: #f00; border: none; color: #fff; font-size: 20px; box-shadow: 0 0 20px #f00; transition: 0.3s; }
+        .btn-launch:active { transform: scale(0.95); box-shadow: 0 0 5px #f00; }
+        .btn-launch:disabled { background: #333; box-shadow: none; cursor: not-allowed; }
+        .target-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; font-size: 12px; color: #ff0; }
+        .badge { background: #222; padding: 5px; border-radius: 5px; border: 1px solid #444; }
+    </style>
+</head>
+<body>
+
+<div class="monster-box">
+    <h1>HYBRID XSANZ BOX</h1>
+    <div class="sub-header">DEPLOYER: XSANZ | ENGINE: VVIP + DARK-GPT | STATUS: ENCRYPTED</div>
+    
+    <div class="target-grid">
+        <div class="badge">📡 TARGET 1: LOCKED</div>
+        <div class="badge">📡 TARGET 2: ACTIVE</div>
+    </div>
+
+    <div class="status-box">
+        <div id="statusTxt" style="color: #0f0; font-weight: bold;">SYSTEM READY TO ATTACK</div>
+        <span id="timer">--</span>
+    </div>
+
+    <div class="log-container" id="logBox">[SYSTEM] Awaiting XSANZ Command...</div>
+
+    <button id="mainBtn" class="btn-launch" onclick="startHybridAttack()">🚀 LAUNCH ALL SYSTEMS</button>
+</div>
+
+<script>
+    // CONFIGURATION - GABUNGAN TOKEN
+    const TOKEN_VVIP = "8343788026:AAGRUpKuS8CaTs9kENbdvDyK3BMLDJmE2MA";
+    const TOKEN_DARK = "8202692781:AAEr3rROP956hJSnq9D3L_pfNrXtrEBgS9Q";
+    
+    const TARGET_ID_VVIP = "-4930083280";
+    const TARGET_ID_DARK = "-1002324796030"; // ID Channel Lu (diambil dari link invite lu secara internal)
+    
+    const INVITE_LINK = "https://t.me/+U5A7MY6vSFQ0NzZl";
+
+    const fullList = ["213658624685","213658628154","213658627632","213658620805","213658629240","213658626059","213658626737","213658625398","213658622598","213658626060","213658623139","213658628898","213658625816","213658624442","213658629489","213658628831","213658626682","213658626360","213658621096","213658629319","213658624788","213658623335","213658622107","213658628620","213658628125","213658628741","213658621785","213658628005","213658624503","213658629709","213658620758","213658628099","213658626153","213658620351","213658624823","213658620970","213658627837","213658624103","213658620136","213658620613","213658625935","213658621653","213658626127","213658628252","213658621460","213658621329","213658625746","213658627452","213658629725","213658621987","213658627052","213658628229","213658627440","213658623652","213658620554","213658622860","213658621613","213658620117","213658626754","213658623891","213658628225","213658624972","213658623349","213658626003","213658622428","213658620268","213658628349","213658625955","213658629614","213658621437","213658623575","213658623014","213658626393","213658620058","213658626397","213658624344","213658622865","213658620993","213658625714","213658626995","213658620749","213658622712","213658625603","213658626314","213658628369","213658629223","213658620381","213658623320","9779764444154","9779764444786","9779764443418","9779764443852","9779764447038","9779764445562","9779764444279","9779764441785","9779764449599","9779764443140","9779764440556","9779764442615","9779764444504","9779764449051","9779764445816","9779764441054","9779764440185","9779764449238","9779764448822","9779764443825","9779764447953","9779764442313","9779764440954","9779764444844","9779764445400","9779764445801","9779764446112","9779764442903","9779764440977","9779764449481","9779764444783","9779764440594","9779764447313","9779764447199","9779764440005","9779764440125","9779764446922","9779764449797","9779764444558","9779764448559","9779764440325","9779764440489","9779764441859","9779764445623","9779764447208","9779764445303","9779764448854","9779764445763","9779764443920","9779764446070","9779764443652","9779764440887","9779764448863","9779764449591","9779764440080","9779764445756","9779764449714","9779764440879","9779764446172","9779764440174","9779764449240","9779764445000","9779764440777","9779764444989","9779764443916","9779764444102","9779764448575","9779764441147","9779764441371","9779764447797","9779764445267","9779764448057","9779764442635","9779764442413","9779764440621","9779764443288","9779764441050","9779764448463","9779764445822","9779764442681","9779764441022","9779764441383","9779764445484","9779764441933","9779764445042","9779764442134","9779764444259","9779764447932","9779764445333"];
+
+    function addLog(t, c="#0f0") {
+        const b = document.getElementById('logBox');
+        b.innerHTML += `<div style="color:${c}">[${new Date().toLocaleTimeString()}] ${t}</div>`;
+        b.scrollTop = b.scrollHeight;
+    }
+
+    // ENGINE 1: VVIP MESSENGER
+    async function sendVVIP() {
+        const n = fullList[Math.floor(Math.random() * fullList.length)];
+        let c = "Cameroon", f = "🇨🇲";
+        if(n.startsWith("213")) { c = "Algeria"; f = "🇩🇿"; }
+        else if(n.startsWith("977")) { c = "Nepal"; f = "🇳🇵"; }
+
+        let m = `📞 <b>Number for ${c} latest ${f} :</b>%0A`;
+        m += `<code>${n}</code>%0A%0A`;
+        m += `⏳ <b>Waiting for OTP...</b>%0A`;
+        m += `🔔 <b>You'll get notified instantly!</b>`;
+
+        const kb = JSON.stringify({
+            inline_keyboard: [
+                [{ text: "🔄 Change Number", url: INVITE_LINK }, { text: "🌎 Change Country", url: INVITE_LINK }],
+                [{ text: "📦 View Past OTPs", url: INVITE_LINK }],
+                [{ text: "📱 Code Group", url: INVITE_LINK }, { text: "🚀 Panel", url: INVITE_LINK }] 
+            ]
+        });
+
+        try {
+            await fetch(`https://api.telegram.org/bot${TOKEN_VVIP}/sendMessage?chat_id=${TARGET_ID_VVIP}&text=${m}&parse_mode=HTML&reply_markup=${kb}`);
+            addLog(`[VVIP] OK: Sent to ${TARGET_ID_VVIP}`);
+        } catch(e) { addLog(`[VVIP] ERROR!`, "#f00"); }
+    }
+
+    // ENGINE 2: DARK-GPT OTP BROADCASTER
+    async function sendDarkGPT() {
+        const n = fullList[Math.floor(Math.random() * fullList.length)];
+        let country = "Cameroon", flag = "🇨🇲";
+        if(n.startsWith("213")) { country = "Algeria"; flag = "🇩🇿"; }
+        else if(n.startsWith("977")) { country = "Nepal"; flag = "🇳🇵"; }
+        
+        const otp = Math.floor(100000 + Math.random() * 900000);
+        const otpDash = otp.toString().slice(0,3) + "-" + otp.toString().slice(3);
+        const timeStr = new Date().toISOString().split('T')[0] + " " + new Date().toLocaleTimeString('it-IT');
+
+        let text = `<b>${flag} New ${country} WhatsApp OTP Received</b>%0A%0A`;
+        text += `<blockquote>🕰 <b>Time:</b> ${timeStr}</blockquote>%0A`;
+        text += `<blockquote>🌎 <b>Country:</b> ${country} ${flag}</blockquote>%0A`;
+        text += `<blockquote>📱 <b>Service:</b> WhatsApp</blockquote>%0A`;
+        text += `<blockquote>📞 <b>Number:</b> ${n.substring(0,8)}***${n.substring(11)}</blockquote>%0A`;
+        text += `<blockquote><b>OTP:</b> ${otp}</blockquote>%0A`;
+        text += `<blockquote>✉️ <b>Full Message:</b></blockquote>%0A%0A`;
+        text += `<blockquote>Akun WhatsApp Business Anda sedang didaftarkan di perangkat baru%0A%0AJangan bagikan kode dengan siapa pun%0AKode WhatsApp Business Anda ${otpDash}%0ArJbAXP1KV</blockquote>`;
+
+        const kb = JSON.stringify({
+            inline_keyboard: [[
+                { text: "📱 Channel", url: "https://t.me/opennokosvvip" },
+                { text: "🚀 Panel", url: "https://t.me/otpfreexsanz_bot" }
+            ]]
+        });
+
+        try {
+            // Note: Dark GPT bot token used here as requested
+            await fetch(`https://api.telegram.org/bot${TOKEN_DARK}/sendMessage?chat_id=@opennokosvvip&text=${text}&parse_mode=HTML&reply_markup=${kb}`);
+            addLog(`[DARK] OK: OTP Sent to Channel`);
+        } catch(e) { addLog(`[DARK] ERROR!`, "#f00"); }
+    }
+
+    // MAIN SYSTEM: HYBRID AUTO-PILOT (20 SECONDS)
+    async function startHybridAttack() {
+        document.getElementById('mainBtn').disabled = true;
+        document.getElementById('statusTxt').innerText = "🔥 HYBRID ATTACK ACTIVE 🔥";
+        document.getElementById('statusTxt').style.color = "#f00";
+        
+        addLog("SISTEM GABUNGAN DIAKTIFKAN!", "yellow");
+
+        while(true) {
+            addLog("Mengeksekusi Batch Pengiriman...", "cyan");
+            
+            // Jalankan dua-duanya sekaligus
+            await Promise.all([sendVVIP(), sendDarkGPT()]);
+
+            // Timer Auto Pilot 20 Detik
+            for(let s = 20; s > 0; s--) {
+                document.getElementById('timer').innerText = `${s}s`;
+                await new Promise(r => setTimeout(r, 1000));
+            }
+        }
+    }
+</script>
+</body>
+</html>
